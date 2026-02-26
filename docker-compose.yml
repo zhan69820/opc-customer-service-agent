@@ -1,11 +1,19 @@
 version: '3.8'
 services:
   app:
-    build: .
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./data:/app/data
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-    volumes:
-      - ./data:/app/data
+    # 从 GitHub 克隆源码并构建
+    command: >
+      sh -c "git clone https://github.com/zhan69820/opc-customer-service-agent.git /tmp/app &&
+             cd /tmp/app &&
+             npm install &&
+             npm run build &&
+             npm start"
     restart: unless-stopped
